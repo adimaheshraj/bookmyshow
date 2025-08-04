@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookMyShow - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: #f9f9f9;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            padding: 30px 40px;
+        }
+        h1 {
+            color: #ff416c;
+            text-align: center;
+        }
+        .movies-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        .movie-card {
+            background: #f7f7f7;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #eee;
+            padding: 18px 20px;
+            width: 220px;
+            text-align: center;
+        }
+        .movie-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .movie-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .movie-desc {
+            font-size: 0.97em;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .book-btn {
+            padding: 8px 18px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .book-btn:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+        }
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Now Showing</h1>
+        <div id="message"></div>
+        <div class="movies-list" id="moviesList"></div>
+        <!-- Add a button or link to go to booking.html -->
+        <div style="text-align:center; margin-bottom:20px;">
+            <button onclick="window.location.href='booking.html'">Go to Booking Page</button>
+        </div>
+    </div>
+    <script>
+        // Fetch and display all movies
+        async function loadMovies() {
+            try {
+                const res = await fetch('/api/movies');
+                if (!res.ok) {
+                    document.getElementById('message').innerHTML = '<span style="color:red;">Failed to load movies. Please try again later.</span>';
+                    return;
+                }
+                const movies = await res.json();
+                const moviesList = document.getElementById('moviesList');
+                moviesList.innerHTML = '';
+                if (!movies || movies.length === 0) {
+                    moviesList.innerHTML = '<div style="color:#888;font-size:1.2em;margin-top:40px;">No movies available.</div>';
+                    return;
+                }
+                movies.forEach(movie => {
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    card.innerHTML = `
+                        <img src="${movie.imageUrl || 'https://via.placeholder.com/220x180?text=No+Image'}" alt="${movie.title}">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-desc">${movie.description || ''}</div>
+                        <button class="book-btn" onclick="bookMovie(${movie.id})">Book Now</button>
+                    `;
+                    moviesList.appendChild(card);
+                });
+            } catch (err) {
+                document.getElementById('message').innerHTML = '<span style="color:red;">Error loading movies. Check your backend and database.</span>';
+            }
+        }
+
+        // Book a movie (simple prompt for userId, theatreId, bookingTime)
+        async function bookMovie(movieId) {
+            const userId = prompt('Enter your User ID:');
+            const theatreId = prompt('Enter Theatre ID:');
+            const bookingTime = prompt('Enter Booking Time (YYYY-MM-DDTHH:MM):');
+            if (!userId || !theatreId || !bookingTime) {
+                document.getElementById('message').innerText = 'Booking cancelled or incomplete details.';
+                return;
+            }
+            const res = await fetch('/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: Number(userId),
+                    movie: { id: Number(movieId) },
+                    theatreId: Number(theatreId),
+                    bookingTime: bookingTime
+                })
+            });
+            if (res.ok) {
+                document.getElementById('message').innerHTML = '<span style="color:green;">Booking successful!</span>';
+            } else {
+                const error = await res.text();
+                document.getElementById('message').innerHTML = '<span style="color:red;">' + error + '</span>';
+            }
+        }
+
+        window.onload = loadMovies;
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Listings</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+    header {
+      background-color: #d72323;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+    .movie {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .movie:hover {
+      transform: scale(1.05);
+    }
+    .movie img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .movie h2 {
+      margin: 10px 0 5px;
+    }
+    .movie p {
+      margin: 0;
+      color: #555;
+    }
+    .book-btn {
+      margin: 15px 0 20px;
+      padding: 10px 20px;
+      background: #d72323;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .book-btn:hover {
+      background: #aa1e1e;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Now Showing</h1>
+</header>
+
+<section class="movies">
+  <div class="movie">
+    <img src="images/inception.jpg" alt="Inception">
+    <h2>Inception</h2>
+    <p>Action, Sci-Fi</p>
+    <button class="book-btn">Book Now</button>
+  </div>
+  <div class="movie">
+    <img src="images/interstellar.jpg" alt="Interstellar">
+    <h2>Interstellar</h2>
+    <p>Adventure, Drama</p>
+    <button class="book-btn">Book Now</button>
+  </div>
+  <div class="movie">
+    <img src="images/avatar.jpg" alt="Avatar">
+    <h2>Avatar</h2>
+    <p>Fantasy, Sci-Fi</p>
+    <button class="book-btn">Book Now</button>
+  </div>
+</section>
+
+</body>
+</html>

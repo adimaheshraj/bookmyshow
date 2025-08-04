@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking - BookMyShow</title>
+    <style>
+        body {
+            background: #f9f9f9;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            margin-top: 60px;
+        }
+        .card {
+            display: inline-block;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Book Your Ticket</h2>
+        <form id="bookingForm">
+            <input type="number" id="userId" placeholder="User ID" value="1" required><br><br>
+            <input type="text" id="movieTitle" placeholder="Movie Title" value="2" required><br><br>
+            <input type="number" id="theatreId" placeholder="Theatre ID" value="3" required><br><br>
+            <input type="datetime-local" id="bookingTime" value="2025-07-17T18:30:00" required><br><br>
+            <button type="submit">Book Now</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById('bookingForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const movieTitle = document.getElementById('movieTitle').value;
+            const theatreId = document.getElementById('theatreId').value;
+            const bookingTime = document.getElementById('bookingTime').value;
+
+            const response = await fetch('http://localhost:8080/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: Number(userId),
+                    movieTitle: movieTitle,
+                    theatreId: Number(theatreId),
+                    bookingTime: bookingTime
+                })
+            });
+
+            const msgDiv = document.getElementById('message');
+            if (response.ok) {
+                msgDiv.innerHTML = '<span style="color:green;">Booking successful!</span>';
+                setTimeout(() => window.location.href = 'movie.html', 1500);
+            } else {
+                const error = await response.text();
+                msgDiv.innerHTML = '<span style="color:red;">' + error + '</span>';
+            }
+        };
+    </script>
+</body>
+</html>

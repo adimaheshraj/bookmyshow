@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Movie Ticket</title>
+</head>
+<body>
+    <h1>Book Movie Ticket</h1>
+    <form method="POST" action="/api/bookings">
+        <label for="userId">User ID:</label>
+        <input type="number" id="userId" name="userId" required><br><br>
+
+        <label for="movieId">Movie ID:</label>
+        <input type="number" id="movieId" name="movieId" required><br><br>
+
+        <label for="theatreId">Theatre ID:</label>
+        <input type="number" id="theatreId" name="theatreId" required><br><br>
+
+        <label for="bookingTime">Booking Time:</label>
+        <input type="datetime-local" id="bookingTime" name="bookingTime" required><br><br>
+
+        <button type="submit">Book Now</button>
+    </form>
+</body>
+</html>

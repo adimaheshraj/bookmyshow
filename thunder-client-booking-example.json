@@ -1,0 +1,6 @@
+{
+  "userId": 1,
+  "movie": { "id": 101 },
+  "theatreId": 5,
+  "bookingTime": "2025-07-11T18:30:00"
+}
